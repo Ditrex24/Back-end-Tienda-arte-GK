@@ -18,3 +18,5 @@ Thumbs.db
 # Build directories
 dist/
 build/
+# Supabase migrations
+supabase/migrations/
