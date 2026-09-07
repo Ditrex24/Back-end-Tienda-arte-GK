@@ -1,0 +1,11 @@
+{
+  "name": "art-ecommerce-backend-zero-deps",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-dependency production-ready TypeScript backend API layer relying exclusively on Node.js 18+ native fetch and node:crypto",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}
