@@ -3,9 +3,29 @@
   "version": "1.0.0",
   "private": true,
   "description": "Zero-dependency production-ready TypeScript backend API layer relying exclusively on Node.js 18+ native fetch and node:crypto",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=11.0.0"
+  },
   "scripts": {
+    "preinstall": "node -e \"if(process.env.npm_execpath && !process.env.npm_execpath.includes('pnpm')) { console.error('ERROR: Use pnpm instead of npm/yarn for security (supply-chain protection).'); process.exit(1); }\"",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "diagnostic": "node scripts/diagnostic.mjs",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "next": "^15.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.0"
   }
 }

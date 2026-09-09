@@ -90,12 +90,27 @@ export class WebhookService {
     // Send Emails via Resend REST
     if (orderItems) {
       try {
-        const customerEmail = profiles && profiles.length > 0 ? `${order.user_id}@customer.com` : 'customer@example.com';
-        
+        // Get real customer email from Supabase Auth Admin API (not the fake user_id@customer.com)
+        let customerEmail = 'customer@example.com';
+        try {
+          const { supabaseAuthListUsers } = await import('@/lib/supabase-rest');
+          const usersData = await supabaseAuthListUsers();
+          const allUsers: Array<{ id: string; email?: string }> = usersData.users ?? usersData ?? [];
+          const matchedUser = allUsers.find((u) => u.id === order.user_id);
+          if (matchedUser?.email) {
+            customerEmail = matchedUser.email;
+          }
+        } catch (userFetchErr) {
+          console.warn('[WebhookService] Could not fetch real user email; using fallback.', userFetchErr);
+        }
+
         await sendOrderConfirmationEmailRest(customerEmail, order, orderItems);
         await sendAdminSaleAlertRest(order, orderItems.length);
+        console.log(`[WebhookService REST] Emails dispatched to ${customerEmail}`);
       } catch (emailErr) {
-        console.error('[WebhookService REST] Resend Email dispatch error:', emailErr);
+        // Non-fatal: email errors must NOT roll back the payment or fail the webhook handler.
+        // Log the error and continue so the order remains marked as paid.
+        console.error('[WebhookService REST] Resend Email dispatch error (non-fatal):', emailErr instanceof Error ? emailErr.message : emailErr);
       }
     }
 

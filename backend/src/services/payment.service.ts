@@ -4,6 +4,20 @@ import { paypalRestCreateOrder, paypalRestCaptureOrder } from '@/lib/paypal-rest
 import { convertToStripeAmount } from '@/lib/stripe/client';
 import { Order } from '@/types';
 
+// Native validation schema (zero-dependency replacement for zod)
+export const PaymentIntentSchema = {
+  parse(body: unknown): { order_id: string; accepted_invoice_terms: boolean } {
+    const b = body as Record<string, unknown>;
+    if (!b || typeof b.order_id !== 'string' || !b.order_id) {
+      throw new Error('order_id is required and must be a non-empty string.');
+    }
+    if (typeof b.accepted_invoice_terms !== 'boolean') {
+      throw new Error('accepted_invoice_terms is required and must be a boolean.');
+    }
+    return { order_id: b.order_id, accepted_invoice_terms: b.accepted_invoice_terms };
+  },
+};
+
 export class PaymentService {
   /**
    * Initializes a Stripe Payment Intent using raw Stripe REST API.

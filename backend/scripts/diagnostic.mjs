@@ -1,7 +1,7 @@
-﻿/**
+/**
  * =============================================================================
  * DIAGNOSTICO COMPLETO DE BACKEND - Art E-Commerce Platform
- * Herramienta: Node.js 18+ nativo (sin dependencias npm)
+ * Herramienta: Node.js 18+ nativo (sin dependencias pnpm/npm externas)
  * Modulos usados: node:crypto, node:fs, node:path, global fetch
  * =============================================================================
  */
@@ -409,7 +409,7 @@ function checkProjectFiles() {
 // BLOQUE 7 - Zero-Dep check
 // ============================================================================
 function checkProhibitedImports() {
-  title('BLOQUE 7 - Auditoria Zero-Dep (Sin paquetes npm prohibidos)');
+  title('BLOQUE 7 - Auditoria Zero-Dep (Sin paquetes pnpm/npm prohibidos)');
   sep();
 
   const forbidden = ['stripe','@stripe/stripe-js','paypal-rest-sdk','axios','node-fetch','zod','yup','express'];

@@ -2,7 +2,12 @@ import { Order, OrderItem } from '@/types';
 import { formatCurrency } from '@/lib/currency/calculator';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_placeholder';
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'orders@artgallery.com';
+// In development, use Resend's pre-verified domain to avoid 403 "domain not verified" errors.
+// In production, set RESEND_FROM_EMAIL to a domain you have verified in Resend dashboard.
+const FROM_EMAIL =
+  process.env.NODE_ENV !== 'production'
+    ? 'onboarding@resend.dev'
+    : (process.env.RESEND_FROM_EMAIL || 'orders@artgallery.com');
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@artgallery.com';
 
 /**
