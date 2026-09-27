@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { SoftButton } from '@/components/ui/SoftButton';
 import { SoftInput } from '@/components/ui/SoftInput';
 import { ArtworkCard } from '@/components/ui/ArtworkCard';
@@ -37,7 +36,7 @@ export default function Home() {
             Gismar Karonen nació en 1994, y su trayectoria ha evolucionado entre la pintura, el arte digital y su pasion a los animales.
           </p>
           <blockquote className="bg-white rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.04)] p-6 border-l-4 border-slate-200">
-            "El arte es un lenguaje que habla directamente al alma sin necesidad de traducción."
+            &quot;El arte es un lenguaje que habla directamente al alma sin necesidad de traducción.&quot;
           </blockquote>
         </div>
       </section>
@@ -46,10 +45,10 @@ export default function Home() {
       <section id="colecciones" className="container mx-auto px-4">
         <h2 className="text-center text-3xl font-semibold text-slate-800 mb-12">Colecciones</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ArtworkCard title="Obra 1" price="$1200" />
-          <ArtworkCard title="Obra 2" price="$950" />
-          <ArtworkCard title="Obra 3" price="$1500" />
-          <ArtworkCard title="Obra 4" price="$800" />
+          <ArtworkCard id="1" title="Obra 1" price="$1200" />
+          <ArtworkCard id="2" title="Obra 2" price="$950" />
+          <ArtworkCard id="3" title="Obra 3" price="$1500" />
+          <ArtworkCard id="4" title="Obra 4" price="$800" />
         </div>
       </section>
 
