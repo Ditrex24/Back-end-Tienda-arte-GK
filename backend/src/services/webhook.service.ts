@@ -3,13 +3,14 @@ import { verifyStripeWebhookSignature } from '@/lib/stripe-rest';
 import { verifyPayPalWebhookSignature } from '@/lib/paypal-rest';
 import { sendOrderConfirmationEmailRest, sendAdminSaleAlertRest } from '@/lib/resend-rest';
 import { Order, OrderItem, Product } from '@/types';
+import { Logger } from '@/lib/logger';
 
 export class WebhookService {
   /**
    * Idempotent handler performing stock decrement, cart clearance, and email dispatches upon payment.
    */
   static async handlePaymentSuccess(orderId: string, gatewayRef: string) {
-    console.log(`[WebhookService REST] Processing payment success for Order: ${orderId} (Ref: ${gatewayRef})`);
+    Logger.info(`Processing payment success for Order: ${orderId}`, { gatewayRef });
 
     // 1. Fetch Order via PostgREST
     const orders = await supabaseRestQuery<Order[]>({
@@ -27,7 +28,7 @@ export class WebhookService {
 
     // Idempotency check: Skip if already paid
     if (order.status === 'paid') {
-      console.log(`[WebhookService REST] Order ${orderId} is already paid. Skipping idempotent processing.`);
+      Logger.info(`Order ${orderId} is already paid. Skipping idempotent processing.`);
       return { status: 'already_processed' };
     }
 
@@ -80,37 +81,44 @@ export class WebhookService {
     });
 
     // 6. Fetch User Email via PostgREST from profiles / auth
-    const profiles = await supabaseRestQuery<Array<{ id: string; first_name: string; last_name: string }>>({
-      table: 'profiles',
-      query: `id=eq.${order.user_id}`,
-      method: 'GET',
-      useServiceRole: true,
-    });
+    // const profiles = await supabaseRestQuery<Array<{ id: string; first_name: string; last_name: string }>>({
+    //   table: 'profiles',
+    //   query: `id=eq.${order.user_id}`,
+    //   method: 'GET',
+    //   useServiceRole: true,
+    // });
 
     // Send Emails via Resend REST
     if (orderItems) {
       try {
-        // Get real customer email from Supabase Auth Admin API (not the fake user_id@customer.com)
-        let customerEmail = 'customer@example.com';
-        try {
-          const { supabaseAuthListUsers } = await import('@/lib/supabase-rest');
-          const usersData = await supabaseAuthListUsers();
-          const allUsers: Array<{ id: string; email?: string }> = usersData.users ?? usersData ?? [];
-          const matchedUser = allUsers.find((u) => u.id === order.user_id);
-          if (matchedUser?.email) {
-            customerEmail = matchedUser.email;
+        let customerEmail: string | undefined = order.customer_email;
+
+        // Si no viene directamente en la orden, buscarlo en Supabase Auth
+        if (!customerEmail && order.user_id) {
+          try {
+            const { supabaseAuthListUsers } = await import('@/lib/supabase-rest');
+            const usersData = await supabaseAuthListUsers();
+            const allUsers: Array<{ id: string; email?: string }> = usersData.users ?? usersData ?? [];
+            const matchedUser = allUsers.find((u) => u.id === order.user_id);
+            if (matchedUser?.email) {
+              customerEmail = matchedUser.email;
+            }
+          } catch (userFetchErr) {
+            Logger.warn('Error al obtener lista de usuarios de Auth', { orderId }, userFetchErr);
           }
-        } catch (userFetchErr) {
-          console.warn('[WebhookService] Could not fetch real user email; using fallback.', userFetchErr);
+        }
+
+        if (!customerEmail) {
+          Logger.error(`Fallo crítico: No se encontró email para la orden ${orderId}`, undefined, { orderId });
+          return { status: 'processed_successfully', orderId, warning: 'Emails not sent due to missing address' };
         }
 
         await sendOrderConfirmationEmailRest(customerEmail, order, orderItems);
         await sendAdminSaleAlertRest(order, orderItems.length);
-        console.log(`[WebhookService REST] Emails dispatched to ${customerEmail}`);
+        Logger.info(`Emails dispatched successfully to ${customerEmail}`);
       } catch (emailErr) {
         // Non-fatal: email errors must NOT roll back the payment or fail the webhook handler.
-        // Log the error and continue so the order remains marked as paid.
-        console.error('[WebhookService REST] Resend Email dispatch error (non-fatal):', emailErr instanceof Error ? emailErr.message : emailErr);
+        Logger.error('Resend Email dispatch error (non-fatal)', emailErr);
       }
     }
 

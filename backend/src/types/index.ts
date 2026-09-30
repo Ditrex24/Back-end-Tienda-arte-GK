@@ -25,6 +25,7 @@ export interface Product {
   description: string | null;
   type: ProductType;
   price: number;
+  compare_at_price?: number;
   stock_quantity: number;
   is_active: boolean;
   created_at: string;
@@ -66,6 +67,7 @@ export interface Order {
   currency: CurrencyCode;
   status: OrderStatus;
   shipping_address: ShippingAddress;
+  customer_email?: string; // Sometimes provided directly
   created_at: string;
   updated_at: string;
 }

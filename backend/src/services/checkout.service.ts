@@ -56,31 +56,17 @@ export class CheckoutService {
 
     const productMap = new Map(products.map((p) => [p.id, p]));
     const invoiceItems: DraftInvoiceItem[] = [];
-    let subtotal = 0;
 
+    // Validar inventario y extraer el subtotal exacto
+    const { calculateOrderSubtotal } = await import('@/utils/cart-logic');
+    const subtotal = calculateOrderSubtotal(items, productMap, targetCurrency);
+
+    // Build invoice items
     for (const itemInput of items) {
-      const product = productMap.get(itemInput.product_id);
-      if (!product) {
-        throw new Error(`Product ID ${itemInput.product_id} is no longer active.`);
-      }
-
-      // Check unique original artwork limit BEFORE stock check for correct semantic error
-      if (product.type === 'original' && itemInput.quantity > 1) {
-        throw new Error(`Original artwork "${product.title}" is unique and restricted to 1 piece per order.`);
-      }
-
-      if (product.stock_quantity < itemInput.quantity) {
-        throw new Error(
-          `Insufficient stock for "${product.title}". Requested: ${itemInput.quantity}, Available: ${product.stock_quantity}`
-        );
-      }
-
-
+      const product = productMap.get(itemInput.product_id)!;
       const unitPriceInTargetCurrency = convertCurrency(product.price, 'USD', targetCurrency);
       const lineTotal = roundToTwoDecimals(unitPriceInTargetCurrency * itemInput.quantity);
-
-      subtotal += lineTotal;
-
+      
       invoiceItems.push({
         product_id: product.id,
         title: product.title,
@@ -91,10 +77,8 @@ export class CheckoutService {
       });
     }
 
-    subtotal = roundToTwoDecimals(subtotal);
-
     // Calculate regional shipping fee
-    const shippingCalc = calculateShippingFee(shipping_address, targetCurrency);
+    const shippingCalc = calculateShippingFee(shipping_address, targetCurrency, subtotal);
     const shippingFee = shippingCalc.feeInSelectedCurrency;
 
     const totalAmount = roundToTwoDecimals(subtotal + shippingFee);

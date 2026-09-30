@@ -27,10 +27,17 @@ coverage/
 # Seguridad – archivos sensibles
 # -------------------------------------------------
 # Variables de entorno
+.env
+.env.local
+.env.development
+.env.test
+.env.production
 *.env
 *.env.*
 # Excepciones: mantener ejemplos de env para referencia
 !.env.example
+!backend/.env.example
+!frontend/.env.example
 # Certificados y llaves privadas
 *.pem
 *.key

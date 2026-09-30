@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { WebhookService } from '@/services/webhook.service';
+import { Logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Stripe Webhook Error';
-    console.error('[Stripe Webhook API Error]:', message);
+    Logger.error('Stripe Webhook API Error', error);
     return NextResponse.json({ success: false, error: message }, { status: 400 });
   }
 }

@@ -1,12 +1,26 @@
-import { Resend } from 'resend';
 import { Order, OrderItem } from '@/types';
 import { formatCurrency } from '@/lib/currency/calculator';
 
 const resendApiKey = process.env.RESEND_API_KEY || 're_placeholder';
-export const resendClient = new Resend(resendApiKey);
-
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'orders@artgallery.com';
 const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'admin@artgallery.com';
+
+const resendFetch = async (endpoint: string, payload: unknown) => {
+  const res = await fetch(`https://api.resend.com${endpoint}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${resendApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    console.error('Resend API Error:', err);
+    throw new Error('Error enviando email via Resend');
+  }
+  return res.json();
+};
 
 /**
  * Dispatch confirmation email to Customer with order breakdown.
@@ -73,7 +87,7 @@ export async function sendOrderConfirmationEmail(
     </html>
   `;
 
-  return await resendClient.emails.send({
+  return await resendFetch('/emails', {
     from: FROM_EMAIL,
     to: customerEmail,
     subject: `Order Confirmation #${order.id.slice(0, 8)} - Fine Art Gallery`,
@@ -100,7 +114,7 @@ export async function sendAdminSaleNotificationEmail(order: Order, itemsCount: n
     <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/admin/orders/${order.id}">View Order in Admin Dashboard</a></p>
   `;
 
-  return await resendClient.emails.send({
+  return await resendFetch('/emails', {
     from: FROM_EMAIL,
     to: ADMIN_EMAIL,
     subject: `⚡ New Sale Alert [${formattedTotal}] - Order #${order.id.slice(0, 8)}`,
@@ -121,7 +135,7 @@ export async function sendVerificationEmail(customerEmail: string, verificationU
     <p style="font-size: 0.85em; color: #666;">Or copy and paste this link in your browser: ${verificationUrl}</p>
   `;
 
-  return await resendClient.emails.send({
+  return await resendFetch('/emails', {
     from: FROM_EMAIL,
     to: customerEmail,
     subject: `Verify Your Email - Fine Art Gallery`,
@@ -150,7 +164,7 @@ export async function sendBatchBroadcastEmail(
       html: htmlContent,
     }));
 
-    const batchResponse = await resendClient.batch.send(emailPayloads);
+    const batchResponse = await resendFetch('/emails/batch', emailPayloads);
     results.push(batchResponse);
   }
 

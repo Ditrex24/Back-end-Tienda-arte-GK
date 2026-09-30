@@ -11,6 +11,7 @@ export interface Artwork {
   year: number;
   images: string[];
   stock: number;
+  compareAtPrice?: number;
 }
 
 export interface CartItem {

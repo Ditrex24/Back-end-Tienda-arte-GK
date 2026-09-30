@@ -14,7 +14,8 @@
     "build": "next build",
     "start": "next start",
     "diagnostic": "node scripts/diagnostic.mjs",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test backend/src/tests/**/*.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

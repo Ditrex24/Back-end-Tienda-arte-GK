@@ -1,4 +1,4 @@
-import { CurrencyCode } from '@/types';
+import type { CurrencyCode } from '../../types/index.ts';
 
 // Default exchange rate: 1 USD = 0.92 EUR
 const DEFAULT_USD_TO_EUR_RATE = 0.92;

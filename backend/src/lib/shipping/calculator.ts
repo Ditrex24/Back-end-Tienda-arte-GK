@@ -1,5 +1,5 @@
-import { CurrencyCode, ShippingAddress } from '@/types';
-import { convertCurrency, roundToTwoDecimals } from '@/lib/currency/calculator';
+import type { CurrencyCode, ShippingAddress } from '../../types/index';
+import { convertCurrency, roundToTwoDecimals } from '../currency/calculator';
 
 export type ShippingRegion = 'North America' | 'Europe' | 'Rest of World';
 
@@ -60,10 +60,12 @@ export interface ShippingCalculationResult {
 
 /**
  * Calculates regional shipping cost converted to customer's chosen checkout currency ('USD' or 'EUR').
+ * Free shipping is applied if subtotal exceeds 2000 in target currency.
  */
 export function calculateShippingFee(
   address: ShippingAddress,
-  targetCurrency: CurrencyCode
+  targetCurrency: CurrencyCode,
+  subtotalInTargetCurrency: number = 0
 ): ShippingCalculationResult {
   const region = getShippingRegion(address.country_code);
 
@@ -84,6 +86,18 @@ export function calculateShippingFee(
       baseFee = currentShippingMatrix.restOfWorldBaseUSD;
       baseCurrency = 'USD';
       break;
+  }
+
+  // Free shipping threshold logic
+  const FREE_SHIPPING_THRESHOLD = 2000;
+  if (subtotalInTargetCurrency > FREE_SHIPPING_THRESHOLD) {
+    return {
+      region,
+      baseFee: 0,
+      baseCurrency,
+      feeInSelectedCurrency: 0,
+      selectedCurrency: targetCurrency,
+    };
   }
 
   const feeInSelectedCurrency = convertCurrency(baseFee, baseCurrency, targetCurrency);
