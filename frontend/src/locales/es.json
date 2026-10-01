@@ -16,10 +16,11 @@
     "exploreButton": "Explorar las colecciones",
     "coverImageAlt": "Imagen de Portada",
     "bioTag": "BIOGRAFÍA",
-    "bioTitle": "El Artista",
-    "bioText": "Gismar Karonen nació en 1994, y su trayectoria ha evolucionado entre la pintura, el arte digital y su pasión a los animales.",
-    "bioQuote": "\"El arte es un lenguaje que habla directamente al alma sin necesidad de traducción.\"",
-    "artistPhotoAlt": "Foto del Artista",
+    "bioTitle": "Gismar Karonen",
+    "bioText": "Nacida en Guayana, Venezuela, en 1994, Gismar Karonen manifestó desde su temprana infancia una profunda pasión por el dibujo y la creación visual. Tras formarse en Comunicación Social y ejercer en publicidad, reconoció que el arte no era un simple pasatiempo, sino su verdadera vocación para expresarse a tiempo completo.",
+    "bioQuote": "\"No es un simple pasatiempo. Era como una obsesión que ardía con la determinación de destruir y volver cenizas cualquiera de mis intentos por reprimirla. Si un hambre así de incesante por crear existe en mí, ¿cómo puedo negar que es para lo que fui puesta aquí?\"",
+    "readFullBio": "Leer biografía completa →",
+    "artistPhotoAlt": "Retrato de Gismar Karonen",
     "collectionsTitle": "Colecciones",
     "loadingGallery": "Cargando obras de la galería...",
     "noArtworks": "No hay obras disponibles en este momento."
@@ -122,5 +123,24 @@
     "button": "Suscribirse",
     "subscribing": "Suscribiendo...",
     "success": "¡Gracias por suscribirte al boletín!"
+  },
+  "biography": {
+    "badge": "HISTORIA & VOCACIÓN",
+    "title": "Gismar Karonen",
+    "subtitle": "La trayectoria de una artista que convirtió la necesidad innata de crear en su propósito de vida.",
+    "backHome": "Volver a la galería",
+    "exploreCollections": "Explorar las colecciones de arte",
+    "p1": "Gismar Karonen nació el 21 de septiembre de 1994 en el seno de un matrimonio joven en Guayana, Venezuela, y fue criada como la primera hija, sobrina y nieta.",
+    "p2": "Desde su temprana infancia manifestó interés por el arte y un espíritu creativo, convirtiendo el dibujo en su pasatiempo favorito, a través del cual expresar sus fantasías y dar rienda suelta a su imaginación. Empezaría por dibujar sus caricaturas favoritas de la televisión imitando su estilo de arte hasta desarrollar el suyo propio.",
+    "p3": "Si bien durante su crecimiento nunca cesó de dibujar, negó en todo momento de hacer del arte algo más que un pasatiempo para ella. Realizó sus estudios universitarios en la Universidad Católica Andrés Bello de Guayana, y se licenció en Comunicación Social bajo la mención de Mercadotecnia y Producción Audiovisual en 2018.",
+    "p4": "Ejerció como publicista durante un par de años hasta finalmente reconocer su deseo de dedicarse al arte a tiempo completo.",
+    "quoteTitle": "Reflexión del Artista",
+    "quote": "\"No es un simple pasatiempo. ¿Por qué otra razón pensaría y ansiaría con tanto fervor tomar un lápiz y papel en cada momento de mi vida? No importaba con qué quisiera distraerme, música, películas, lectura, viajes, juegos, todo era como gasolina para ese fuego que me llevaba a fantasear con mensajes, reflexiones, emociones y cómo expresarlos a través del arte. Era como una obsesión que, mientras más trataba de mantener escondida en un cofre bajo llave, crecía y ardía con la determinación de destruir y volver cenizas cualquiera de mis intentos por reprimirla. Si un hambre así de incesante y descomunal por crear, y por nada más, existe en mi, ¿cómo puedo negar que es para lo que fui puesta aquí?\"",
+    "galleryTitle": "Estudio, Procesos y Creación",
+    "gallerySubtitle": "Una mirada íntima al espacio donde las ideas toman forma sobre el lienzo.",
+    "photoStudio": "Espacio de trabajo y caballete",
+    "photoProcess": "Mezcla de pigmentos y texturas",
+    "photoSketches": "Bocetos preliminares y estudio anatómico",
+    "photoPortrait": "Retrato oficial de la artista"
   }
 }

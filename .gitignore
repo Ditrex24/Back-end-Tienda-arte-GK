@@ -20,6 +20,8 @@
 **/build/
 # Turbo (turborepo) cache
 **/.turbo/
+# TypeScript build cache
+*.tsbuildinfo
 # Cobertura de tests
 coverage/
 

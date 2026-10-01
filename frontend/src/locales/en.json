@@ -16,10 +16,11 @@
     "exploreButton": "Explore Collections",
     "coverImageAlt": "Cover Image",
     "bioTag": "BIOGRAPHY",
-    "bioTitle": "The Artist",
-    "bioText": "Gismar Karonen was born in 1994, and her artistic journey has evolved between painting, digital art, and her passion for animals.",
-    "bioQuote": "\"Art is a language that speaks directly to the soul without needing translation.\"",
-    "artistPhotoAlt": "Artist Photo",
+    "bioTitle": "Gismar Karonen",
+    "bioText": "Born in Guayana, Venezuela in 1994, Gismar Karonen showed from early childhood a profound passion for drawing and visual creation. After earning her degree in Social Communications and working in advertising, she recognized that art was far more than a pastime—it was her lifelong calling.",
+    "bioQuote": "\"It is not a mere hobby. It was like an obsession burning with the determination to reduce any attempt to suppress it to ashes. If such an unyielding hunger to create exists within me, how can I deny this is why I was put here?\"",
+    "readFullBio": "Read full biography →",
+    "artistPhotoAlt": "Portrait of Gismar Karonen",
     "collectionsTitle": "Collections",
     "loadingGallery": "Loading gallery artworks...",
     "noArtworks": "No artworks available at this moment."
@@ -122,5 +123,24 @@
     "button": "Subscribe",
     "subscribing": "Subscribing...",
     "success": "Thank you for subscribing to our newsletter!"
+  },
+  "biography": {
+    "badge": "STORY & CALLING",
+    "title": "Gismar Karonen",
+    "subtitle": "The journey of an artist who transformed an innate need to create into her life purpose.",
+    "backHome": "Back to gallery",
+    "exploreCollections": "Explore art collections",
+    "p1": "Gismar Karonen was born on September 21, 1994, to a young couple in Guayana, Venezuela, and was raised as the first daughter, niece, and granddaughter.",
+    "p2": "From her earliest childhood, she displayed a keen interest in art and a vibrant creative spirit, making drawing her favorite hobby to give free rein to her imagination and express her fantasies. She began by drawing her favorite television cartoons, imitating their art styles until she developed her very own.",
+    "p3": "Although she never stopped drawing as she grew up, she persistently resisted making art anything more than a pastime. She pursued her university studies at Universidad Católica Andrés Bello in Guayana, graduating with a degree in Social Communication with a focus on Marketing and Audiovisual Production in 2018.",
+    "p4": "She worked as an advertising specialist for a couple of years before finally embracing her true desire to devote herself to art full-time.",
+    "quoteTitle": "Artist Reflection",
+    "quote": "\"It is not a mere hobby. Why else would I think of and yearn with such fervor to hold a pencil and paper at every single moment of my life? No matter what I tried to distract myself with—music, movies, reading, travel, games—everything was just fuel for that fire leading me to daydream about messages, reflections, emotions, and how to express them through art. It was like an obsession that, the more I tried to keep locked inside a chest, grew and burned with the determination to destroy and turn any of my attempts to repress it into ashes. If such an unyielding and colossal hunger to create, and to create only, exists within me, how can I deny that this is what I was put here for?\"",
+    "galleryTitle": "Studio, Process & Creation",
+    "gallerySubtitle": "An intimate glimpse into the space where ideas come to life on canvas.",
+    "photoStudio": "Workspace & easel",
+    "photoProcess": "Blending pigments & textures",
+    "photoSketches": "Preliminary sketches & study",
+    "photoPortrait": "Official artist portrait"
   }
 }

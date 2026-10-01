@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { SoftButton } from '@/components/ui/SoftButton';
 import { ArtworkCard } from '@/components/ui/ArtworkCard';
 import { NewsletterForm } from '@/components/ui/NewsletterForm';
@@ -49,21 +50,42 @@ export default function Home() {
       </section>
 
       {/* Biografía Section */}
-      <section id="biografia" className="grid md:grid-cols-2 gap-8 container mx-auto px-4 items-center">
-        <div className="relative w-full h-80 rounded-3xl overflow-hidden">
-          <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 font-medium">
-            {t('home.artistPhotoAlt')}
+      <section id="biografia" className="grid md:grid-cols-2 gap-10 container mx-auto px-4 items-center py-8">
+        <div className="relative w-full h-96 rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-slate-100 group">
+          <div className="w-full h-full bg-gradient-to-tr from-slate-200 via-slate-100 to-indigo-50 flex flex-col items-center justify-center text-slate-500 font-medium p-6 text-center space-y-3">
+            <div className="w-20 h-20 rounded-full bg-white/80 shadow-inner flex items-center justify-center text-slate-400 group-hover:scale-105 transition-transform">
+              <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-semibold text-slate-700 text-base">{t('biography.title')}</p>
+              <p className="text-xs text-slate-500">{t('home.artistPhotoAlt')}</p>
+            </div>
           </div>
         </div>
+
         <div className="space-y-6">
-          <span className="text-sm text-slate-600 uppercase tracking-widest">{t('home.bioTag')}</span>
-          <h2 className="text-4xl font-semibold text-slate-800">{t('home.bioTitle')}</h2>
-          <p className="text-slate-600 leading-relaxed">
+          <span className="text-xs font-semibold text-indigo-600 bg-indigo-50/80 px-3 py-1 rounded-full uppercase tracking-widest inline-block">
+            {t('home.bioTag')}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            {t('home.bioTitle')}
+          </h2>
+          <p className="text-slate-600 leading-relaxed text-base sm:text-lg">
             {t('home.bioText')}
           </p>
-          <blockquote className="bg-white rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.04)] p-6 border-l-4 border-slate-200 italic text-slate-700">
+          <blockquote className="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-6 border-l-4 border-indigo-400 italic text-slate-700 text-sm leading-relaxed">
             {t('home.bioQuote')}
           </blockquote>
+          
+          <div className="pt-2">
+            <Link href="/biografia">
+              <SoftButton variant="primary" className="w-auto">
+                {t('home.readFullBio')}
+              </SoftButton>
+            </Link>
+          </div>
         </div>
       </section>
 
