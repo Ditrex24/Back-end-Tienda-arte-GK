@@ -9,7 +9,9 @@ import { useState } from 'react';
 import { SoftInput } from '@/components/ui/SoftInput';
 import { SoftButton } from '@/components/ui/SoftButton';
 import { ToastAlert } from '@/components/ui/ToastAlert';
+import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
 import { apiFetch } from '@/lib/api';
+import { useTranslation } from '@/context/LanguageContext';
 import type { RegisterResponse } from '@/lib/auth.types';
 
 // ---------------------------------------------------------------------------
@@ -44,14 +46,9 @@ const registerSchema = z
     message: 'Las contraseñas no coinciden',
   });
 
-// Tipo de los campos del formulario (lo que RHF maneja — age es string)
 type RegisterFormData = z.input<typeof registerSchema>;
-// Tipo de la salida validada (lo que llega a onSubmit — age es number)
 type RegisterFormOutput = z.output<typeof registerSchema>;
 
-// ---------------------------------------------------------------------------
-// Labels amigables para el selector de género
-// ---------------------------------------------------------------------------
 const GENDER_LABELS: Record<(typeof GENDER_OPTIONS)[number], string> = {
   male: 'Hombre',
   female: 'Mujer',
@@ -60,11 +57,9 @@ const GENDER_LABELS: Record<(typeof GENDER_OPTIONS)[number], string> = {
   other: 'Otro',
 };
 
-// ---------------------------------------------------------------------------
-// Página de registro
-// ---------------------------------------------------------------------------
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [serverError, setServerError] = useState<string | null>(null);
   const [serverSuccess, setServerSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,13 +89,11 @@ export default function RegisterPage() {
         },
       });
 
-      // Mostrar el mensaje de éxito que devuelve el backend
       setServerSuccess(
         result.message ??
           '¡Registro exitoso! Revisa tu correo para verificar tu cuenta antes de iniciar sesión.'
       );
 
-      // Redirigir al login tras 2.5 s para que el usuario lea el mensaje
       setTimeout(() => router.push('/login'), 2500);
     } catch (e) {
       setServerError((e as Error).message);
@@ -112,19 +105,31 @@ export default function RegisterPage() {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-1">
-        <h2 className="text-2xl font-bold text-slate-800">Crear cuenta</h2>
-        <p className="text-sm text-slate-500">Únete a la comunidad de GISMAR KARONEN</p>
+        <h2 className="text-2xl font-bold text-slate-800">{t('auth.registerTitle')}</h2>
+        <p className="text-sm text-slate-500">{t('auth.registerSubtitle')}</p>
       </div>
 
-      {serverError && <ToastAlert message={serverError} type="error" />}
-      {serverSuccess && <ToastAlert message={serverSuccess} type="success" />}
+      {serverError && <ToastAlert message={serverError} type="error" onClose={() => setServerError(null)} />}
+      {serverSuccess && <ToastAlert message={serverSuccess} type="success" onClose={() => setServerSuccess(null)} />}
+
+      {/* Botón de Google OAuth */}
+      <div className="space-y-4">
+        <GoogleSignInButton />
+
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-slate-200 w-full" />
+          <span className="bg-white px-3 text-xs text-slate-400 uppercase tracking-wider absolute">
+            {t('auth.orDivider')}
+          </span>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {/* Nombre y apellido en la misma fila */}
         <div className="grid grid-cols-2 gap-3">
           <div>
             <SoftInput
-              label="Nombre"
+              label={t('auth.firstName')}
               type="text"
               placeholder="María"
               autoComplete="given-name"
@@ -137,7 +142,7 @@ export default function RegisterPage() {
           </div>
           <div>
             <SoftInput
-              label="Apellido"
+              label={t('auth.lastName')}
               type="text"
               placeholder="García"
               autoComplete="family-name"
@@ -154,7 +159,7 @@ export default function RegisterPage() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <SoftInput
-              label="Edad"
+              label={t('auth.age')}
               type="number"
               placeholder="25"
               min={18}
@@ -167,14 +172,14 @@ export default function RegisterPage() {
             )}
           </div>
           <div className="flex flex-col space-y-1">
-            <label className="text-sm font-medium text-gray-700">Género</label>
+            <label className="text-sm font-medium text-gray-700">{t('auth.gender')}</label>
             <select
               {...register('gender')}
               className={`bg-slate-50 rounded-2xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all ${
                 errors.gender ? 'border-red-400 focus:ring-red-200' : 'border-slate-100/50'
               }`}
             >
-              <option value="">Seleccionar…</option>
+              <option value="">{t('auth.selectGender')}</option>
               {GENDER_OPTIONS.map((g) => (
                 <option key={g} value={g}>
                   {GENDER_LABELS[g]}
@@ -190,7 +195,7 @@ export default function RegisterPage() {
         {/* Email */}
         <div>
           <SoftInput
-            label="Correo electrónico"
+            label={t('auth.emailLabel')}
             type="email"
             placeholder="tu@correo.com"
             autoComplete="email"
@@ -205,7 +210,7 @@ export default function RegisterPage() {
         {/* Contraseña */}
         <div>
           <SoftInput
-            label="Contraseña"
+            label={t('auth.passwordLabel')}
             type="password"
             placeholder="••••••••"
             autoComplete="new-password"
@@ -220,7 +225,7 @@ export default function RegisterPage() {
         {/* Confirmar contraseña */}
         <div>
           <SoftInput
-            label="Confirmar contraseña"
+            label={t('auth.confirmPassword')}
             type="password"
             placeholder="••••••••"
             autoComplete="new-password"
@@ -238,14 +243,14 @@ export default function RegisterPage() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Creando cuenta…' : 'Registrarse'}
+          {isSubmitting ? t('auth.creatingAccount') : t('auth.registerButton')}
         </SoftButton>
       </form>
 
       <p className="text-center text-sm text-slate-500">
-        ¿Ya tienes cuenta?{' '}
+        {t('auth.hasAccount')}{' '}
         <a href="/login" className="text-slate-700 font-medium hover:underline">
-          Inicia sesión
+          {t('auth.loginHere')}
         </a>
       </p>
     </div>

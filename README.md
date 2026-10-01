@@ -10,6 +10,8 @@
 - 🏷️ **Sistema de Ofertas y Descuentos:** Precios originales tachados (`~$200~` → `$150`), cálculo dinámico de porcentaje de ahorro e insignias de *"Oferta / Sale"*.
 - 🌐 **Internacionalización Nativa (ES / EN):** Cambio de idioma instantáneo en tiempo real (Español e Inglés) sin recargar la página, con preferencia guardada en `localStorage`. Cero dependencias pesadas externas.
 - 🔔 **Notificaciones Emergentes Flotantes (`ToastAlert`):** Sistema de notificaciones emergentes con nivel `z-[100]` posicionado en la esquina inferior derecha, garantizando legibilidad total sin solapamientos.
+- 📬 **Boletín de Arte / Newsletter:** Suscripción integrada con validación de correos, persistencia en base de datos y bienvenida editorial automatizada vía Resend REST API.
+- 🔑 **Autenticación con Google (OAuth 2.0):** Registro e inicio de sesión con Google en un clic para coleccionistas y clientes, con sincronización de perfiles en tiempo real y soporte multilingüe.
 - 🛠️ **Panel de Administración Completo:** Gestión de inventario, cambio de precios, edición de obras y subida directa de fotografías al almacenamiento en la nube (*Supabase Storage*).
 - 🔒 **Arquitectura Zero-Trust:** Backend sin SDKs externos ni dependencias pesadas; usa `fetch` nativo, cookies seguras HTTP-Only, middleware CORS estricto y Rate Limiting por ruta.
 - 📧 **Autenticación de Usuarios:** Registro e inicio de sesión integrados con confirmación de correo electrónico y protección de rutas para clientes y administradores.
@@ -95,6 +97,30 @@ cd frontend
 pnpm exec next dev
 ```
 > La aplicación web iniciará en: `http://localhost:3000`
+
+---
+
+## 🔑 Configuración de Google OAuth en Supabase
+
+Para habilitar el registro e inicio de sesión con Google:
+
+1. **Google Cloud Console:**
+   - Crea un proyecto en [Google Cloud Console](https://console.cloud.google.com/).
+   - En **APIs & Services > Credentials**, crea credenciales de tipo **OAuth 2.0 Client IDs**.
+   - En **Authorized redirect URIs**, agrega la URL de callback de Supabase:
+     ```
+     https://<TU-PROYECTO-SUPABASE>.supabase.co/auth/v1/callback
+     ```
+2. **Supabase Dashboard:**
+   - Ingresa a tu proyecto en [Supabase](https://supabase.com/dashboard).
+   - Dirígete a **Authentication > Providers > Google**.
+   - Activa el interruptor **Enable Google provider**.
+   - Pega tu **Client ID** y **Client Secret** generados en Google Cloud Console.
+   - En **Authentication > URL Configuration**, agrega en **Redirect URLs**:
+     ```
+     http://localhost:3000/auth/callback
+     ```
+     *(y el dominio de producción cuando se despliegue).*
 
 ---
 

@@ -32,7 +32,7 @@ export const NewsletterForm = () => {
     setFeedback(null);
 
     try {
-      await apiFetch('/newsletter/subscribe', {
+      const result = await apiFetch<{ message?: string }>('/newsletter/subscribe', {
         method: 'POST',
         body: {
           first_name: formData.firstName,
@@ -41,7 +41,10 @@ export const NewsletterForm = () => {
         },
       });
 
-      setFeedback({ type: 'success', message: t('newsletter.success') });
+      setFeedback({ 
+        type: 'success', 
+        message: result?.message || t('newsletter.success') 
+      });
       setFormData({ firstName: '', lastName: '', email: '' });
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : 'Error de conexión.';

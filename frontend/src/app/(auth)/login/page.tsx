@@ -4,11 +4,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { SoftInput } from '@/components/ui/SoftInput';
 import { SoftButton } from '@/components/ui/SoftButton';
 import { ToastAlert } from '@/components/ui/ToastAlert';
+import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
 import { apiFetch } from '@/lib/api';
 import { useTranslation } from '@/context/LanguageContext';
 import type { LoginResponse } from '@/lib/auth.types';
@@ -32,6 +33,24 @@ export default function LoginPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const errorParam = params.get('error') || params.get('error_description');
+      if (errorParam) {
+        if (
+          errorParam.includes('provider_not_enabled') ||
+          errorParam.includes('validation_failed') ||
+          errorParam.includes('Unsupported provider')
+        ) {
+          setServerError(t('auth.googleProviderNotice'));
+        } else {
+          setServerError(t('auth.googleError'));
+        }
+      }
+    }
+  }, [t]);
 
   const {
     register,
@@ -78,8 +97,20 @@ export default function LoginPage() {
         <p className="text-sm text-slate-500">{t('auth.loginSubtitle')}</p>
       </div>
 
-      {serverError && <ToastAlert message={serverError} type="error" />}
-      {successMsg && <ToastAlert message={successMsg} type="success" />}
+      {serverError && <ToastAlert message={serverError} type="error" onClose={() => setServerError(null)} />}
+      {successMsg && <ToastAlert message={successMsg} type="success" onClose={() => setSuccessMsg(null)} />}
+
+      {/* Botón de Google OAuth */}
+      <div className="space-y-4">
+        <GoogleSignInButton />
+
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-slate-200 w-full" />
+          <span className="bg-white px-3 text-xs text-slate-400 uppercase tracking-wider absolute">
+            {t('auth.orDivider')}
+          </span>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <div>
